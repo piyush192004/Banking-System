@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import AlertBox from "./AlertBox.jsx";
+import AlertBox from "./AlertBox";
 
 export default function TransactionForm() {
   const [activeTab, setActiveTab] = useState("deposit");

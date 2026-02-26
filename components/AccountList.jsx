@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AlertBox from "./AlertBox.jsx";
+import AlertBox from "./AlertBox";
 
 export default function AccountList() {
   const [accounts, setAccounts] = useState([]);

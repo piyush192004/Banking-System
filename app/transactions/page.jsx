@@ -1,6 +1,6 @@
 "use client";
 
-import TransactionForm from "@/components/TransactionForm.jsx";
+import TransactionForm from "@/components/TransactionForm";
 
 export default function TransactionsPage() {
   return (
