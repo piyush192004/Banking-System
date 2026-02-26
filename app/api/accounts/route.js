@@ -1,17 +1,17 @@
-import { NextResponse } from 'next/server';
-import bankStore from '@/lib/bankStore';
-import { validateHolderName, generateAccountNumber } from '@/lib/validations';
+import { NextResponse } from "next/server";
+import bankStore from "@/lib/bankStore";
+import { validateHolderName, generateAccountNumber } from "@/lib/validations";
 
 /**
  * POST /api/accounts
  * Create a new bank account
- * 
+ *
  * Request body:
  * {
  *   "holderName": "John Doe",
  *   "isKYCVerified": false
  * }
- * 
+ *
  * Response:
  * {
  *   "success": true,
@@ -36,7 +36,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          message: nameValidation.error
+          message: nameValidation.error,
         },
         { status: 400 }
       );
@@ -52,7 +52,7 @@ export async function POST(request) {
       balance: 0,
       isKYCVerified,
       createdAt: new Date().toISOString(),
-      transactions: []
+      transactions: [],
     };
 
     // Store account
@@ -61,18 +61,18 @@ export async function POST(request) {
     return NextResponse.json(
       {
         success: true,
-        message: 'Account created successfully',
-        data: newAccount
+        message: "Account created successfully",
+        data: newAccount,
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error('Account creation error:', error);
+    console.error("Account creation error:", error);
     return NextResponse.json(
       {
         success: false,
-        message: 'Internal server error',
-        error: error.message
+        message: "Internal server error",
+        error: error.message,
       },
       { status: 500 }
     );
@@ -82,7 +82,7 @@ export async function POST(request) {
 /**
  * GET /api/accounts
  * Retrieve all bank accounts
- * 
+ *
  * Response:
  * {
  *   "success": true,
@@ -104,17 +104,17 @@ export async function GET(request) {
     return NextResponse.json(
       {
         success: true,
-        data: accounts
+        data: accounts,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error('Fetch accounts error:', error);
+    console.error("Fetch accounts error:", error);
     return NextResponse.json(
       {
         success: false,
-        message: 'Internal server error',
-        error: error.message
+        message: "Internal server error",
+        error: error.message,
       },
       { status: 500 }
     );

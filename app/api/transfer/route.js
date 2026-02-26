@@ -1,17 +1,17 @@
-import { NextResponse } from 'next/server';
-import bankStore from '@/lib/bankStore';
+import { NextResponse } from "next/server";
+import bankStore from "@/lib/bankStore";
 import {
   validateAccountExists,
   validateAmount,
   validateSufficientBalance,
   validateKYCVerification,
-  validateDifferentAccounts
-} from '@/lib/validations';
+  validateDifferentAccounts,
+} from "@/lib/validations";
 
 /**
  * POST /api/transfer
  * Transfer money between accounts
- * 
+ *
  * Request body:
  * {
  *   "senderAccountNo": "ACC-20260226-12345",
@@ -30,31 +30,37 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          message: senderValidation.error
+          message: senderValidation.error,
         },
         { status: 404 }
       );
     }
 
     // Validate receiver account exists
-    const receiverValidation = validateAccountExists(receiverAccountNo, bankStore);
+    const receiverValidation = validateAccountExists(
+      receiverAccountNo,
+      bankStore
+    );
     if (!receiverValidation.valid) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Receiver account does not exist'
+          message: "Receiver account does not exist",
         },
         { status: 404 }
       );
     }
 
     // Validate sender and receiver are different
-    const differentAccountsValidation = validateDifferentAccounts(senderAccountNo, receiverAccountNo);
+    const differentAccountsValidation = validateDifferentAccounts(
+      senderAccountNo,
+      receiverAccountNo
+    );
     if (!differentAccountsValidation.valid) {
       return NextResponse.json(
         {
           success: false,
-          message: differentAccountsValidation.error
+          message: differentAccountsValidation.error,
         },
         { status: 400 }
       );
@@ -66,7 +72,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          message: amountValidation.error
+          message: amountValidation.error,
         },
         { status: 400 }
       );
@@ -81,7 +87,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          message: kycValidation.error
+          message: kycValidation.error,
         },
         { status: 400 }
       );
@@ -93,7 +99,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          message: balanceValidation.error
+          message: balanceValidation.error,
         },
         { status: 400 }
       );
@@ -113,56 +119,56 @@ export async function POST(request) {
 
     // Record transactions for both accounts
     bankStore.addTransaction(senderAccountNo, {
-      type: 'transfer',
+      type: "transfer",
       amount: numAmount,
       fromAccount: senderAccountNo,
       toAccount: receiverAccountNo,
       previousBalance: senderAccount.balance,
       newBalance: senderNewBalance,
-      status: 'success'
+      status: "success",
     });
 
     bankStore.addTransaction(receiverAccountNo, {
-      type: 'transfer',
+      type: "transfer",
       amount: numAmount,
       fromAccount: senderAccountNo,
       toAccount: receiverAccountNo,
       previousBalance: receiverAccount.balance,
       newBalance: receiverNewBalance,
-      status: 'success'
+      status: "success",
     });
 
     return NextResponse.json(
       {
         success: true,
-        message: 'Transfer successful',
+        message: "Transfer successful",
         data: {
           transactionId: `TXN-${Date.now()}`,
           senderAccount: {
             accountNo: senderAccountNo,
             holderName: senderAccount.holderName,
             previousBalance: senderAccount.balance,
-            newBalance: senderNewBalance
+            newBalance: senderNewBalance,
           },
           receiverAccount: {
             accountNo: receiverAccountNo,
             holderName: receiverAccount.holderName,
             previousBalance: receiverAccount.balance,
-            newBalance: receiverNewBalance
+            newBalance: receiverNewBalance,
           },
           transferAmount: numAmount,
-          timestamp: new Date().toISOString()
-        }
+          timestamp: new Date().toISOString(),
+        },
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error('Transfer error:', error);
+    console.error("Transfer error:", error);
     return NextResponse.json(
       {
         success: false,
-        message: 'Internal server error',
-        error: error.message
+        message: "Internal server error",
+        error: error.message,
       },
       { status: 500 }
     );

@@ -1,8 +1,9 @@
-import './globals.css';
+import "./globals.css";
 
 export const metadata = {
-  title: 'Banking System',
-  description: 'A complete banking system with account creation, deposits, withdrawals, and transfers',
+  title: "Banking System",
+  description:
+    "A complete banking system with account creation, deposits, withdrawals, and transfers",
 };
 
 export default function RootLayout({ children }) {
@@ -11,15 +12,26 @@ export default function RootLayout({ children }) {
       <body className="bg-gray-100">
         <nav className="bg-white shadow-md sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-blue-600">🏦 Banking System</h1>
+            <h1 className="text-2xl font-bold text-blue-600">
+              🏦 Banking System
+            </h1>
             <div className="space-x-4 flex">
-              <a href="/create-account" className="text-gray-700 hover:text-blue-600 font-medium transition">
+              <a
+                href="/create-account"
+                className="text-gray-700 hover:text-blue-600 font-medium transition"
+              >
                 Create Account
               </a>
-              <a href="/transactions" className="text-gray-700 hover:text-blue-600 font-medium transition">
+              <a
+                href="/transactions"
+                className="text-gray-700 hover:text-blue-600 font-medium transition"
+              >
                 Transactions
               </a>
-              <a href="/accounts" className="text-gray-700 hover:text-blue-600 font-medium transition">
+              <a
+                href="/accounts"
+                className="text-gray-700 hover:text-blue-600 font-medium transition"
+              >
                 All Accounts
               </a>
             </div>

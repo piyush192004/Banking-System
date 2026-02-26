@@ -1,50 +1,50 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import AlertBox from './AlertBox';
+import { useState } from "react";
+import AlertBox from "./AlertBox.jsx";
 
 export default function AccountForm() {
   const [formData, setFormData] = useState({
-    holderName: '',
-    isKYCVerified: false
+    holderName: "",
+    isKYCVerified: false,
   });
   const [loading, setLoading] = useState(false);
-  const [alert, setAlert] = useState({ message: '', type: '' });
+  const [alert, setAlert] = useState({ message: "", type: "" });
   const [createdAccount, setCreatedAccount] = useState(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setAlert({ message: '', type: '' });
+    setAlert({ message: "", type: "" });
 
     try {
-      const response = await fetch('/api/accounts', {
-        method: 'POST',
+      const response = await fetch("/api/accounts", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        setAlert({ message: data.message, type: 'success' });
+        setAlert({ message: data.message, type: "success" });
         setCreatedAccount(data.data);
-        setFormData({ holderName: '', isKYCVerified: false });
+        setFormData({ holderName: "", isKYCVerified: false });
       } else {
-        setAlert({ message: data.message, type: 'error' });
+        setAlert({ message: data.message, type: "error" });
       }
     } catch (error) {
-      setAlert({ message: 'Error creating account', type: 'error' });
+      setAlert({ message: "Error creating account", type: "error" });
       console.error(error);
     } finally {
       setLoading(false);
@@ -56,27 +56,41 @@ export default function AccountForm() {
   return (
     <div className="max-w-md mx-auto">
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Create Bank Account</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          Create Bank Account
+        </h2>
 
         <AlertBox
           message={alert.message}
           type={alert.type}
-          onClose={() => setAlert({ message: '', type: '' })}
+          onClose={() => setAlert({ message: "", type: "" })}
         />
 
         {createdAccount ? (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-            <h3 className="text-lg font-semibold text-green-800 mb-3">Account Created Successfully!</h3>
+            <h3 className="text-lg font-semibold text-green-800 mb-3">
+              Account Created Successfully!
+            </h3>
             <div className="space-y-2 text-sm text-gray-700">
-              <p><strong>Account Number:</strong> {createdAccount.accountNo}</p>
-              <p><strong>Holder Name:</strong> {createdAccount.holderName}</p>
-              <p><strong>Initial Balance:</strong> ${createdAccount.balance.toFixed(2)}</p>
-              <p><strong>KYC Verified:</strong> {createdAccount.isKYCVerified ? 'Yes' : 'No'}</p>
+              <p>
+                <strong>Account Number:</strong> {createdAccount.accountNo}
+              </p>
+              <p>
+                <strong>Holder Name:</strong> {createdAccount.holderName}
+              </p>
+              <p>
+                <strong>Initial Balance:</strong> $
+                {createdAccount.balance.toFixed(2)}
+              </p>
+              <p>
+                <strong>KYC Verified:</strong>{" "}
+                {createdAccount.isKYCVerified ? "Yes" : "No"}
+              </p>
             </div>
             <button
               onClick={() => {
                 setCreatedAccount(null);
-                setAlert({ message: '', type: '' });
+                setAlert({ message: "", type: "" });
               }}
               className="mt-4 w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition"
             >
@@ -109,7 +123,10 @@ export default function AccountForm() {
                 onChange={handleChange}
                 className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
               />
-              <label htmlFor="kycVerified" className="text-sm text-gray-700 cursor-pointer">
+              <label
+                htmlFor="kycVerified"
+                className="text-sm text-gray-700 cursor-pointer"
+              >
                 KYC Verified
               </label>
             </div>
@@ -119,11 +136,11 @@ export default function AccountForm() {
               disabled={!isFormValid || loading}
               className={`w-full py-2 px-4 rounded-lg font-medium text-white transition ${
                 isFormValid && !loading
-                  ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                  : 'bg-gray-400 cursor-not-allowed'
+                  ? "bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                  : "bg-gray-400 cursor-not-allowed"
               }`}
             >
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
         )}

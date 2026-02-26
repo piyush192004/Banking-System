@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
-import bankStore from '@/lib/bankStore';
-import { validateAccountExists, validateAmount } from '@/lib/validations';
+import { NextResponse } from "next/server";
+import bankStore from "@/lib/bankStore";
+import { validateAccountExists, validateAmount } from "@/lib/validations";
 
 /**
  * POST /api/deposit
  * Deposit money to an account
- * 
+ *
  * Request body:
  * {
  *   "accountNo": "ACC-20260226-12345",
@@ -23,7 +23,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          message: accountValidation.error
+          message: accountValidation.error,
         },
         { status: 404 }
       );
@@ -35,7 +35,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           success: false,
-          message: amountValidation.error
+          message: amountValidation.error,
         },
         { status: 400 }
       );
@@ -48,11 +48,11 @@ export async function POST(request) {
 
     // Record transaction
     bankStore.addTransaction(accountNo, {
-      type: 'deposit',
+      type: "deposit",
       amount: parseFloat(amount),
       previousBalance: account.balance,
       newBalance: newBalance,
-      status: 'success'
+      status: "success",
     });
 
     const updatedAccount = bankStore.getAccount(accountNo);
@@ -60,25 +60,25 @@ export async function POST(request) {
     return NextResponse.json(
       {
         success: true,
-        message: 'Deposit successful',
+        message: "Deposit successful",
         data: {
           accountNo,
           holderName: updatedAccount.holderName,
           previousBalance: account.balance,
           depositAmount: parseFloat(amount),
           newBalance: newBalance,
-          timestamp: new Date().toISOString()
-        }
+          timestamp: new Date().toISOString(),
+        },
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error('Deposit error:', error);
+    console.error("Deposit error:", error);
     return NextResponse.json(
       {
         success: false,
-        message: 'Internal server error',
-        error: error.message
+        message: "Internal server error",
+        error: error.message,
       },
       { status: 500 }
     );
