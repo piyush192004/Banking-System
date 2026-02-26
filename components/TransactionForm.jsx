@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AlertBox from "./AlertBox";
 
 export default function TransactionForm() {
@@ -14,6 +14,11 @@ export default function TransactionForm() {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ message: "", type: "" });
   const [transactionResult, setTransactionResult] = useState(null);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -93,6 +98,32 @@ export default function TransactionForm() {
     formData.senderAccountNo.trim().length > 0 &&
     formData.receiverAccountNo.trim().length > 0 &&
     parseFloat(formData.amount) > 0;
+
+  if (!isHydrated) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            Transaction Management
+          </h2>
+          <div className="flex space-x-4 mb-6 border-b">
+            {["deposit", "withdraw", "transfer"].map((tab) => (
+              <button
+                key={tab}
+                disabled
+                className="px-4 py-2 font-medium border-b-2 border-transparent text-gray-600"
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </div>
+          <div className="text-center py-8">
+            <p className="text-gray-600">Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto">

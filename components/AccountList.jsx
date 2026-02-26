@@ -8,8 +8,10 @@ export default function AccountList() {
   const [loading, setLoading] = useState(true);
   const [alert, setAlert] = useState({ message: "", type: "" });
   const [stats, setStats] = useState({ totalAccounts: 0, totalBalance: 0 });
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
+    setIsHydrated(true);
     fetchAccounts();
   }, []);
 
@@ -41,6 +43,19 @@ export default function AccountList() {
       setLoading(false);
     }
   };
+
+  if (!isHydrated) {
+    return (
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">All Accounts</h2>
+          <div className="text-center py-8">
+            <p className="text-gray-600">Loading accounts...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -144,7 +159,7 @@ export default function AccountList() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-600 text-xs">
-                      {new Date(account.createdAt).toLocaleDateString()}
+                      {account.createdAt.split('T')[0]}
                     </td>
                   </tr>
                 ))}
